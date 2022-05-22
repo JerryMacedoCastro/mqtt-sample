@@ -10,4 +10,5 @@ An industrial environment is monitored by a set of temperature sensors that send
 2. run `yarn` to install dependencies
 3. navigate to project folder using your terminal 
 4. run `yarn sensor` to start the temperature sensor simulator
-5. run `yarn cat`to start the Compute Average Temperature (CAT) service 
+5. run `yarn cat` to start the Compute Average Temperature (CAT) service 
+6. run `yarn alarms`  to see the log of the alarms been fires
