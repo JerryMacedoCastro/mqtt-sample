@@ -1,41 +1,47 @@
-
-import * as mqtt from "mqtt"
+import * as mqtt from "mqtt";
 
 // compute-average-temperature
 try {
-     let count = 0; 
-     let tempValues: number[] = [];
-     let avgValues: number[] = [];
-     const client : mqtt.MqttClient = mqtt.connect("mqtt://test.mosquitto.org");
-     client.on('connect', function () {
-        client.subscribe('temperature');
-        console.log("Client has subscribed successfully!");
-     });
-     client.on('message', function (topic, message) {
-        count++;
-        if (count == 2) {
-         // console.log("valor: ", message.toString());
-         tempValues.push(parseFloat(message.toString()));
-         count = 0;
-        }
-        if (tempValues.length == 2) {
-         const avgTemp = (tempValues[0] + tempValues[1]) / 2;  
-         console.log("Average temperature: ", avgTemp , "°C");
-         avgValues.push(avgTemp);
-         tempValues = [];
-        }
+  let count = 0;
+  let tempValues: number[] = [];
+  let avgValues: number[] = [];
+  const client: mqtt.MqttClient = mqtt.connect("mqtt://test.mosquitto.org");
+  client.on("connect", function () {
+    client.subscribe("temperature");
+    console.log("Client has subscribed successfully!");
+  });
+  client.on("message", function (_topic, message) {
+    if (message.toString() !== "") {
+      count++;
+      if (parseFloat(message.toString()) > 200) {
+        console.log("High temperature: ", message.toString(), "°C");
+        client.publish("high-temperature", message.toString());
+      }
+      if (count === 2) {
+        console.log("Second received value: ", message.toString());
+        tempValues.push(parseFloat(message.toString()));
+        count = 0;
+      }
+      if (tempValues.length == 2) {
+        const avgTemp = (tempValues[0] + tempValues[1]) / 2;
+        console.log("Average temperature: ", avgTemp, "°C");
+        avgValues.push(avgTemp);
+        tempValues = [];
+      }
 
-        if (avgValues.length == 2) {
-         const avgDiff = avgValues[1] - avgValues[0];
-         if(avgDiff > 5.0) {
-          console.log(`${avgValues[1]} - ${avgValues[0]}  = ${avgDiff} [Sudden temperature rise!]`);
-         }
-         avgValues = [];
+      if (avgValues.length == 2) {
+        const avgDiff = avgValues[1] - avgValues[0];
+        if (avgDiff > 5.0) {
+          console.log(
+            `${avgValues[1]} - ${avgValues[0]}  = ${avgDiff} [Sudden temperature rise!]`
+          );
+          client.publish("temperature-rise", avgDiff.toString());
         }
-     
-     });      
-   
-} catch ({message}) {
-    console.log(message);
+        avgValues[0] = avgValues[1];
+        avgValues.pop();
+      }
+    }
+  });
+} catch ({ message }) {
+  console.log(message);
 }
-
