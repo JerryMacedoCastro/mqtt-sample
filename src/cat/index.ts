@@ -14,17 +14,17 @@ try {
     if (message.toString() !== "") {
       count++;
       if (parseFloat(message.toString()) > 200) {
-        console.log("High temperature: ", message.toString(), "°C");
+        // console.log("High temperature: ", message.toString(), "°C");
         client.publish("high-temperature", message.toString());
       }
       if (count === 2) {
-        console.log("Second received value: ", message.toString());
+        // console.log("Second received value: ", message.toString());
         tempValues.push(parseFloat(message.toString()));
         count = 0;
       }
       if (tempValues.length == 2) {
         const avgTemp = (tempValues[0] + tempValues[1]) / 2;
-        console.log("Average temperature: ", avgTemp, "°C");
+        // console.log("Average temperature: ", avgTemp, "°C");
         avgValues.push(avgTemp);
         tempValues = [];
       }
@@ -32,9 +32,9 @@ try {
       if (avgValues.length == 2) {
         const avgDiff = avgValues[1] - avgValues[0];
         if (avgDiff > 5.0) {
-          console.log(
-            `${avgValues[1]} - ${avgValues[0]}  = ${avgDiff} [Sudden temperature rise!]`
-          );
+          // console.log(
+          //   `${avgValues[1]} - ${avgValues[0]}  = ${avgDiff} [Sudden temperature rise!]`
+          // );
           client.publish("temperature-rise", avgDiff.toString());
         }
         avgValues[0] = avgValues[1];
