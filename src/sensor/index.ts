@@ -1,10 +1,13 @@
 import * as mqtt from "mqtt"
 
-// publisher
+
 try {
+    console.log("Iniciando sensor...");
     const client : mqtt.MqttClient = mqtt.connect("mqtt://test.mosquitto.org");
     client.on("connect", function () {
+        console.log("Conectado ao broker MQTT");
         client.publish("temperature", "");
+        console.log("Publicando mensagens no tópico 'temperature'");
         setInterval(function() {
             let randomTemp = Math.random() * 400;
             console.log("Temperatura atual: ", randomTemp, "°C");

@@ -12,3 +12,10 @@ An industrial environment is monitored by a set of temperature sensors that send
 4. run `yarn sensor` to start the temperature sensor simulator
 5. run `yarn cat` to start the Compute Average Temperature (CAT) service 
 6. run `yarn alarms`  to see the log of the alarms been fires
+
+### Wroking example
+ - for this sample it's used a sensor sending a new temperature at each 2 seconds
+ 
+
+https://user-images.githubusercontent.com/39466788/170149434-90494338-671a-469e-8a1d-13133db746f5.mp4
+

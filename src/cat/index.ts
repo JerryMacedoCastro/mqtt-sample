@@ -7,8 +7,10 @@ try {
   let avgValues: number[] = [];
   const client: mqtt.MqttClient = mqtt.connect("mqtt://test.mosquitto.org");
   client.on("connect", function () {
+    console.log("Conectado ao broker MQTT");
     client.subscribe("temperature");
-    console.log("Client has subscribed successfully!");
+    console.log("Cliente inscrito no tópico 'temperature'!");
+    console.log("Publicando mensagens de alta temperatura e aumento repentino de temperatura");
   });
   client.on("message", function (_topic, message) {
     if (message.toString() !== "") {
